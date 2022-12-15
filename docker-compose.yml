@@ -1,0 +1,15 @@
+version: "3.7"
+
+services:
+  web:
+    environment:
+      - DEBUG=true # any string value is true
+      - ACCESS_TOKEN=token
+    build: .
+    command: uvicorn app.app:app --reload --host 0.0.0.0
+    volumes:
+      - .:/keycloak
+    ports:
+      - "8000:8000"
+    stdin_open: true
+    tty: true
