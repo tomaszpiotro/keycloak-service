@@ -1,20 +1,11 @@
-import os
-
 import aiohttp
 from client.constants import HOST, PORT, REALM
-from common.exceptions import ImproperlyConfigured
-
-
-ACCESS_TOKEN = os.environ.get('ACCESS_TOKEN')
-
-if not ACCESS_TOKEN:
-    raise ImproperlyConfigured('access token missing')
 
 
 BASE_URL = f'http://{HOST}:{PORT}/realms/{REALM}/'
 
 
-async def request_access(permissions: list[str]) -> bool:
+async def request_access(permissions: list[str], access_token: str) -> bool:
     """
     audience
 
@@ -25,7 +16,7 @@ async def request_access(permissions: list[str]) -> bool:
     # todo what about audience parameter???
 
     payload = {'permission': permissions, 'response_mode': 'decision'}
-    headers = {'Authorization': f'Bearer {ACCESS_TOKEN}'}
+    headers = {'Authorization': f'Bearer {access_token}'}
     async with aiohttp.ClientSession() as session:
         async with session.post(f'{BASE_URL}protocol/openid-connect/token', data=payload, headers=headers) as response:
             if response.status == 404:

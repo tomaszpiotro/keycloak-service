@@ -4,7 +4,6 @@ services:
   web:
     environment:
       - DEBUG=true # any string value is true
-      - ACCESS_TOKEN=token
     build: .
     command: uvicorn app.app:app --reload --host 0.0.0.0
     volumes:
